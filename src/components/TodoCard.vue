@@ -1,8 +1,8 @@
 <template>
     <div class="todo__card">
         <div class="todo__check">
-          <Checkbox v-model="check" :binary="true" />
-          <p>{{label}}</p>
+          <Checkbox data-test="check" v-model="check" :binary="true" />
+          <p data-test="label">{{label}}</p>
         </div>
       </div>
 </template>
@@ -32,7 +32,6 @@ watch(() => check.value, () => {
 watch(() => props.checkValue, () => {
     check.value = props.checkValue
 })
-    
 </script>
 <style lang="less" scoped>
  .todo__card {
