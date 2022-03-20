@@ -1,4 +1,4 @@
-import TodoCard from "./TodoCard.vue"
+import TodoCard from "../components/TodoCard.vue"
 import { flushPromises, mount, MountingOptions, VueWrapper } from '@vue/test-utils'
 import { describe, expect, it } from "vitest"
 import { faker } from "@faker-js/faker"

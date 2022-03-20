@@ -2,16 +2,16 @@
   <div class="todo">
     <main class="todo__body">
 
-      <TodoCard v-for="todo in todoList" :label="todo.name" v-model:checkValue="todo.check"/>
+      <TodoCard v-for="todo in todoList" :label="todo.name" v-model:checkValue="todo.check" data-test="todo"/>
 
       <Divider />
        
       <form class="todo__form">
         <div class="todo__footer">
           <div class="todo_footer-input">
-            <InputText :class="{'p-invalid': v$.taskName.$error}" id="task" type="text" v-model="taskName" class="todo__input" @keydown.enter.prevent="handleAddTodo" />
+            <InputText data-test="task" :class="{'p-invalid': v$.taskName.$error}" id="task" type="text" v-model="taskName" class="todo__input" @keydown.enter.prevent="handleAddTodo" />
           </div>
-          <Button @click="handleAddTodo" label="Submit" icon="pi pi-send" iconPos="right" />
+          <Button data-test="send" @click="handleAddTodo" label="Submit" icon="pi pi-send" iconPos="right" />
         </div>
        
       </form>
@@ -61,8 +61,6 @@ export default defineComponent({
     const countTodo = todoStore.countTodo
 
     const todoList = computed(() => todoStore.todos)
-
-   
 
     const resetValidation = () => v$.value.$reset()
 
