@@ -2,13 +2,7 @@
   <div class="todo">
     <main class="todo__body">
 
-      <div class="todo__card" v-for="todo in todoList" :key="todo.id">
-        <div class="todo__check">
-          <Checkbox v-model="todo.check" :binary="true" />
-          <p>{{todo.name}}</p>
-        </div>
-        
-      </div>
+      <TodoCard v-for="todo in todoList" :label="todo.name" v-model:checkValue="todo.check"/>
 
       <Divider />
        
@@ -30,10 +24,11 @@ import { computed, defineComponent, reactive, ref, toRefs, UnwrapRef } from 'vue
 import Button from 'primevue/button';
 import InputText from "primevue/inputtext"
 import Divider from 'primevue/divider';
-import Checkbox from 'primevue/checkbox';
+
 import { useTodoStore } from './stores/todo';
 import useVuelidate from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
+import TodoCard from './components/TodoCard.vue';
 
 interface IModel {
   taskName: string
@@ -44,8 +39,8 @@ export default defineComponent({
     Button,
     InputText,
     Divider,
-    Checkbox
-  },
+    TodoCard
+},
   setup() {
     
     const model: UnwrapRef<IModel> = reactive({
@@ -130,30 +125,6 @@ body {
     display: grid;
     grid-auto-rows: 90px;
     gap: 16px;
-
-    .todo__card {
-      padding: 16px;
-      background: var(--surface-200);
-      border-radius: 10px;
-      box-shadow: 3px 3px 6px -1px var(--surface-300);
-
-      .todo__check {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 16px;
-       
-        color: var(--text-color);
-
-        p {
-          font-family: var(--font-family);
-          color: var(--text-color);
-          font-weight: 600;
-          font-size: 14px;
-        }
-      }
-    }
 
 
     .todo__form {
