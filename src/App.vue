@@ -15,7 +15,7 @@
       <form class="todo__form">
         <div class="todo__footer">
           <div class="todo_footer-input">
-            <InputText type="text" v-model="task" class="todo__input" />
+            <InputText :class="{'p-invalid': v$.taskName.$error}" id="task" type="text" v-model="taskName" class="todo__input" @keydown.enter.prevent="handleAddTodo" />
           </div>
           <Button @click="handleAddTodo" label="Submit" icon="pi pi-send" iconPos="right" />
         </div>
@@ -26,13 +26,18 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, reactive, ref, toRefs, UnwrapRef } from 'vue'
 import Button from 'primevue/button';
 import InputText from "primevue/inputtext"
 import Divider from 'primevue/divider';
 import Checkbox from 'primevue/checkbox';
-import {  useTodoStore } from './stores/todo';
+import { useTodoStore } from './stores/todo';
+import useVuelidate from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 
+interface IModel {
+  taskName: string
+}
 
 export default defineComponent({
   components: {
@@ -42,8 +47,17 @@ export default defineComponent({
     Checkbox
   },
   setup() {
-    const task = ref("")
-    const checked = ref(false)
+    
+    const model: UnwrapRef<IModel> = reactive({
+      taskName: ""
+    })
+
+     const rules: Record<keyof IModel, any> = {
+      taskName: { required, minLength: minLength(1) }
+    }
+
+     const v$ = useVuelidate(rules, model)
+
 
     const todoStore = useTodoStore()
 
@@ -53,23 +67,36 @@ export default defineComponent({
 
     const todoList = computed(() => todoStore.todos)
 
+   
+
+    const resetValidation = () => v$.value.$reset()
+
+    const invalidForm = computed(() => v$.value.$invalid)
+
     const handleAddTodo = () => {
+      if(invalidForm.value) {
+        v$.value.$touch()
+        return
+      }
+
       addTodo({
         id: (countTodo + 1).toString(),
         check: false,
-        name: task.value
+        name: model.taskName
       })
 
-      task.value = ""
+      model.taskName = ""
+
+      resetValidation()
     }
 
     return {
-      task,
-      checked,
+      ...toRefs(model),
       handleAddTodo,
-      todoList
+      todoList,
+      v$
     }
-  },
+  }
 })
 </script>
 <style lang="less">
