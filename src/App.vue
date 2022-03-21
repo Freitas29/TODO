@@ -2,10 +2,11 @@
   <div class="todo">
     <main class="todo__body">
 
+    <div class="todo__virtual_scroll">
+
       <TodoCard v-for="todo in todoList" :label="todo.name" v-model:checkValue="todo.check" data-test="todo"/>
 
-      <Divider />
-       
+    </div>
       <form class="todo__form">
         <div class="todo__footer">
           <div class="todo_footer-input">
@@ -15,6 +16,7 @@
         </div>
        
       </form>
+      
     </main>
   </div>
 </template>
@@ -102,6 +104,25 @@ body {
   background-color: var(--surface-200);
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--surface-300);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-400);
+}
+
 .todo {
   height: 100vh;
   padding: 16px 60px;
@@ -120,9 +141,16 @@ body {
     box-shadow: 9px 12px 19px 13px var(--surface-300);
     padding: 16px;
     position: relative;
-    display: grid;
-    grid-auto-rows: 90px;
-    gap: 16px;
+    
+
+    .todo__virtual_scroll {
+      display: grid;
+      grid-auto-rows: 90px;
+      gap: 16px;
+      height: 80vh;
+      overflow-y: auto;
+      padding: 8px;
+    }
 
 
     .todo__form {
